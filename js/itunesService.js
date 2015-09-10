@@ -1,13 +1,72 @@
 var app = angular.module('itunes');
 
 app.service('itunesService', function($http, $q){
-  //This service is what will do the 'heavy lifting' and get our data from the iTunes API.
-  //Also not that we're using a 'service' and not a 'factory' so all your method you want to call in your controller need to be on 'this'.
 
-  //Write a method that accepts an artist's name as the parameter, then makes a 'JSONP' http request to a url that looks like this
-  //https://itunes.apple.com/search?term=' + artist + '&callback=JSON_CALLBACK'
-  //Note that in the above line, artist is the parameter being passed in. 
-  //You can return the http request or you can make your own promise in order to manipulate the data before you resolve it.
+	this.getArtist = function (artist, option) {
+		var dfd = $q.defer();
 
-    //Code here
-});
+		$http({
+			method: 'JSONP',
+			url: 'https://itunes.apple.com/search?term=' + artist + '&media=' + option + '&callback=JSON_CALLBACK'
+		}).then(function(responce) {
+			filteredResponce = responce.data.results
+			console.log(responce.data.results)
+			var newArray = [];
+			for (var i = 0; i < filteredResponce.length; i++) {
+				var newObj = {
+					AlbumArt: filteredResponce[i].artworkUrl100,
+					Artist: filteredResponce[i].artistName,
+					Collection: filteredResponce[i].collectionName,
+					CollectionPrice: filteredResponce[i].collectionPrice,
+					Play: filteredResponce[i].previewUrl,
+					Type: filteredResponce[i].kind,
+					TrackCount: filteredResponce[i].trackCount
+				}
+				newArray.push(newObj);
+			}
+			dfd.resolve(newArray);
+		})
+		return dfd.promise;
+	}
+  
+}); //Real one
+
+
+	 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// var app = angular.module('itunes');
+
+// app.service('itunesService', function($http, $q){
+
+
+// 	var getArtist = function (artist) {
+// 		// var dfd = $q.defer();
+
+// 		$http({
+// 			method: 'JSONP',
+// 			url: 'https://itunes.apple.com/search?term=' + artist + '&callback=JSON_CALLBACK'
+// 		}).then(function(responce) {
+// 			console.log(responce);
+
+// 		})
+// 	}
+//     getArtist('nelly');
+// }); //raw data 

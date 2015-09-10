@@ -16,8 +16,15 @@
           <form class="navbar-form navbar-left" role="search">
             <div class="form-group">
               <input type="text" class="form-control" ng-model="artist" placeholder="Artist Name" >
+
               <button class="btn btn-primary" ng-click="getSongData()"> Submit </button>
-            </div>
+
+              <select class="form-control" ng-model="newOption" ng-init="0" ng-options="option.value as option.name  for option in dropDown" placeholder="value" ng-change="getSongData(artist, newOption)">
+
+              </select>
+
+              <input type="text" class="form-control ng-valid ng-dirty" placeholder="Search Data" ng-model="filterOptions.filterText">
+            </div> 
           </form>
         </div>
       </div>
